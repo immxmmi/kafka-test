@@ -18,7 +18,7 @@ spec:
       {{- end }}
       containers:
         {{- with .Values.deployment }}
-        - name: {{ $.Release.Name }}-ui
+        - name: {{ $.Release.Name }}
           image: {{ .image }}:{{ .tag }}
           imagePullPolicy: {{ .imagePullPolicy }}
           ports:
