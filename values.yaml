@@ -54,8 +54,7 @@ kafka-cluster:
       - id: 0
         type: persistent-claim
         size: 10Gi
-        class: cloudscale-volume-ssd
-        deleteClaim: true
+        deleteClaim: false
         kraftMetadata: shared
     resources:
       requests:
