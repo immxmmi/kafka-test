@@ -4,10 +4,10 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-ui-svc
   labels:
-     app: {{ .Release.Name }}
+     app: {{ .Release.Name }}-ui
 spec:
   selector:
-    app: {{ .Release.Name }}
+    app: {{ .Release.Name }}-ui
   type: {{ .Values.service.type }}
   ports:
     - protocol: TCP

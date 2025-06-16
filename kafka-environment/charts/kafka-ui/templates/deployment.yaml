@@ -6,11 +6,11 @@ spec:
   replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: {{ .Release.Name }}-ui
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        app: {{ .Release.Name }}-ui
     spec:
       {{- if .Values.deployment.imagePullSecret }}
       imagePullSecrets:
@@ -18,7 +18,7 @@ spec:
       {{- end }}
       containers:
         {{- with .Values.deployment }}
-        - name: {{ $.Release.Name }}
+        - name: {{ $.Release.Name }}-ui
           image: {{ .image }}:{{ .tag }}
           imagePullPolicy: {{ .imagePullPolicy }}
           ports:
