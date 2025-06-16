@@ -1,0 +1,16 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaNodePool
+metadata:
+  name: {{ .Values.nodePool.name }}
+  labels:
+    strimzi.io/cluster: {{ .Values.nodePool.cluster }}
+spec:
+  replicas: {{ .Values.nodePool.replicas }}
+  roles:
+{{ toYaml .Values.nodePool.roles | indent 4 }}
+  storage:
+    type: jbod
+    volumes:
+{{ toYaml .Values.nodePool.volumes | indent 6 }}
+  resources:
+{{ toYaml .Values.nodePool.resources | indent 4 }}

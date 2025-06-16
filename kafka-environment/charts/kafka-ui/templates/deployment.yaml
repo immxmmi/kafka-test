@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      {{- if .Values.deployment.imagePullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.deployment.imagePullSecret }}
+      {{- end }}
+      containers:
+        {{- with .Values.deployment }}
+        - name: {{ $.Release.Name }}
+          image: {{ .image }}:{{ .tag }}
+          imagePullPolicy: {{ .imagePullPolicy }}
+          ports:
+            - containerPort: {{ .containerPort }}
+          env:
+            - name: KAFKA_CLUSTERS_0_NAME
+              value: "{{ .env.KAFKA_CLUSTER_NAME }}"
+            - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
+              value: "{{ .env.KAFKA_BROKER }}"
+        {{- end }}

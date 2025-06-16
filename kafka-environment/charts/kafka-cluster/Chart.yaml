@@ -1,0 +1,6 @@
+apiVersion: v2
+name: kafka-cluster
+description: A Helm chart for deploying a Strimzi Kafka cluster with node pools and topics
+type: application
+version: 1.0.0
+appVersion: "4.0.0"

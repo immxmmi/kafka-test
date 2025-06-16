@@ -1,0 +1,15 @@
+deployment:
+  replicas: 1
+  image: provectuslabs/kafka-ui
+  tag: latest
+  imagePullPolicy: IfNotPresent
+ # imagePullSecrets: registry-pull-secret
+  containerPort: 8080
+  env:
+    KAFKA_CLUSTER_NAME: mykafka-cluster
+    KAFKA_BROKER: mykafka-cluster-kafka-bootstrap.kafka:9092
+service:
+  enabled: true
+  type: "ClusterIP"
+  port: 8080
+
