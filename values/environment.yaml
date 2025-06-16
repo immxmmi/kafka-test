@@ -81,12 +81,3 @@ kafka-cluster:
         retention.ms: 604800000
         segment.bytes: 104857500
         cleanup.policy: delete
-
-    - name: topic-weather-data
-      cluster: mykafka-cluster
-      partitions: 1
-      replicas: 1
-      config:
-        retention.ms: 604800000
-        segment.bytes: 104857500
-        cleanup.policy: delete
