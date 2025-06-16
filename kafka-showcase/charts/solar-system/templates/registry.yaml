@@ -1,0 +1,24 @@
+
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: {{ .Release.Name }}-registry-pull-secret
+  labels:
+    {{- include "kafka-poc-solar-system.labels" . | nindent 4 }}
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: vault
+    kind: SecretStore
+  target:
+    creationPolicy: Owner
+    name: registry-pull-secret
+    template:
+      data:
+        .dockerconfigjson: "{{ `{{ .dcgf }}` }}"
+      type: kubernetes.io/dockerconfigjson
+  data:
+    - remoteRef:
+        key: pitc-cicd/kafka-poc/registry
+        property: docker-config
+      secretKey: dcgf
