@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-ui-deployment
+  name: {{ default "kafka-ui" .Values.nameOverride }}-deployment
 spec:
   replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-ui
+      app: {{ default "kafka-ui" .Values.nameOverride }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-ui
+        app: {{ default "kafka-ui" .Values.nameOverride }}
     spec:
       {{- if .Values.deployment.imagePullSecret }}
       imagePullSecrets:
@@ -18,14 +18,14 @@ spec:
       {{- end }}
       containers:
         {{- with .Values.deployment }}
-        - name: {{ $.Release.Name }}-ui
+        - name: {{ default "kafka-ui" $.Values.nameOverride }}
           image: {{ .image }}:{{ .tag }}
           imagePullPolicy: {{ .imagePullPolicy }}
           ports:
             - containerPort: {{ .containerPort }}
+        {{- end }}
           env:
             - name: KAFKA_CLUSTERS_0_NAME
-              value: "{{ .env.KAFKA_CLUSTER_NAME }}"
+              value: "{{ .Values.cluster.name }}"
             - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
-              value: "{{ .env.KAFKA_BROKER }}"
-        {{- end }}
+              value: "{{ .Values.cluster.name }}-kafka-bootstrap.{{ .Values.cluster.namespace }}.svc.cluster.local:{{ .Values.cluster.kafkaPort }}"

@@ -1,9 +1,9 @@
 apiVersion: v2
 name:  kafka-environment
-version: 1.0.1
+version: 1.0.3
 description: A Helm chart for deploying a Kafka environment with Kafka UI
 dependencies:
   - name: kafka-ui
-    version: 1.0.0
+    version: 1.0.2
   - name: kafka-cluster
-    version: 1.0.0
+    version: 1.0.1

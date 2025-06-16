@@ -1,7 +1,9 @@
+# Kafka cluster metadata and configuration
 cluster:
   name: mykafka-cluster
   version: 4.0.0
   metadataVersion: 4.0-IV3
+  # Kafka listener types and ports
   listeners:
     - name: plain
       port: 9092
@@ -11,6 +13,7 @@ cluster:
       port: 9093
       type: internal
       tls: true
+  # Key Kafka configuration options
   config:
     auto.create.topics.enable: false
     default.replication.factor: 1
@@ -19,9 +22,10 @@ cluster:
     offsets.topic.replication.factor: 1
     transaction.state.log.replication.factor: 1
     transaction.state.log.min.isr: 1
+
+# NodePool configuration (roles, storage, resources)
 nodePool:
   name: dual-role
-  cluster: mykafka-cluster
   replicas: 1
   roles:
     - controller
@@ -29,8 +33,8 @@ nodePool:
   volumes:
     - id: 0
       type: persistent-claim
-      size: 10Gi
-      deleteClaim: false
+      size: 5Gi
+      deleteClaim: true
       kraftMetadata: shared
   resources:
     requests:
@@ -39,9 +43,10 @@ nodePool:
     limits:
       memory: "4Gi"
       cpu: "1"
+
+# Example topic configuration (currently commented out)
 topics:
-#  - name: topic-solar-data
-#    cluster: mykafka-cluster
+#  - name: topic-test-data
 #    partitions: 2
 #    replicas: 2
 #    config:
