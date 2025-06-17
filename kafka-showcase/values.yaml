@@ -1,52 +1,40 @@
-externalSecret:
-  registry: false
-
-ingress:
-  enabled: false
-  hostname: "kafka-poc.ocp.cloudscale.puzzle.ch"
-
 mosquitto:
   enabled: true
-
+  
 solar-system:
-  mqtt-bridge:
-    image:
-      repository: harbor.puzzle.ch/pitc-cicd-private/kafka-poc
-      tag: mqtt-bridge-latest
-      pullPolicy: IfNotPresent
-    env:
-      MQTT_BROKER: "tcp://solar-system-mosquitto.solar-system.svc.cluster.local:1883"
-      MQTT_TOPIC: "solar/data"
-      KAFKA_BROKER: "mykafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092"
-      KAFKA_TOPIC: "topic-solar-data"
-      KAFKA_BALANCER: "hash"
-
+### Kafka web consumer configuration
   kafka-web-consumer:
+    replicaCount: 1
+    kafkaBroker:
+      name: mykafka-cluster
+      namespace: kafka
     image:
       repository: harbor.puzzle.ch/pitc-cicd-private/kafka-poc
       tag: solar-consumer-latest
     #  tag: solar-kafka-web-consumer-latest
       pullPolicy: Always
 
-    env:
-      KAFKA_BROKER: "mykafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092"
-      KAFKA_TOPIC: "topic-solar-data"
-      KAFKA_CONSUMER_GROUP: "gui-consumer"
-      KAFKA_START_OFFSET: "first"
-
-  mqtt-producer:
+# Bridge between MQTT and Kafka
+  mqtt-bridge:
     replicaCount: 1
+    kafkaBroker:
+      name: mykafka-cluster
+      namespace: kafka
+    mqttBroker:
+      name: system-mosquitto
+      namespace: mosquitto
     image:
-      repository: harbor.puzzle.ch/pitc-cicd-private/kafka-pocsolar-mqtt-producer
+      repository: harbor.puzzle.ch/pitc-cicd-private/kafka-poc
       tag: latest
       pullPolicy: IfNotPresent
-    env:
-      MQTT_BROKER: "tcp://solar-system-mosquitto.solar-system.svc.cluster.local:1883"
-      MQTT_TOPIC: "solar/data"
-      FETCH_INTERVAL: 3
-  ingress:
-    hostname: ""
 
-traffic-system:
-
-weather-system:
+### mqtt-producer configuration
+  mqtt-producer:
+    replicaCount: 1
+    mqttBroker:
+      name: solar-system-mosquitto
+      namespace: solar-system
+    image:
+      repository: harbor.puzzle.ch/pitc-cicd-private/kafka-poc
+      tag: solar-mqtt-producer-latest
+      pullPolicy: IfNotPresent
